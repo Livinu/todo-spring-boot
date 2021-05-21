@@ -5,11 +5,11 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.5'
+        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.2.0'
     }
 }
 
-apply plugin: org.sonarqube.gradle.SonarQubePlugin
+apply plugin: 'org.sonarqube'
 
 sonarqube {
     properties {
