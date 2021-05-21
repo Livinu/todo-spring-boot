@@ -41,7 +41,7 @@ public class ToDoRepositoryIntegrationTest {
         List<Long> ids = new ArrayList<>();
         ids.add(toDoItem1.getId());
         ids.add(toDoItem2.getId());
-        assertEquals(repository.findAll(ids).size(),2);
+        assertEquals(2,repository.findAll(ids).size());
     }
 
     @Test
@@ -66,7 +66,7 @@ public class ToDoRepositoryIntegrationTest {
         assertNotNull(toDoItem.getId());
         toDoItem.setName("Clean dishes");
         repository.save(toDoItem);
-        assertEquals(repository.findOne(toDoItem.getId()).getName(), "Clean dishes");
+        assertEquals("Clean dishes", repository.findOne(toDoItem.getId()).getName() );
     }
 
     private ToDoItem persistToDoItem(String name) {

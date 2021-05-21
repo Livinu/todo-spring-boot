@@ -15,6 +15,12 @@ import java.util.List;
 @Controller
 public class ToDoController {
     public static final String INDEX_PAGE = "todo-list";
+    public static final String ITEMS = "toDoItems";
+    public static final String STATS = "stats";
+    public static final String FILTER = "filter";
+    public static final String REDIRECT = "redirect";
+    
+    
 
     private ToDoRepository toDoRepository;
 
@@ -28,42 +34,42 @@ public class ToDoController {
         return "redirect:/all";
     }
 
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    @GetMapping(value = "/all")
     public String allItems(Model model) {
         List<ToDoItem> toDoItems = toDoRepository.findAll();
-        model.addAttribute("toDoItems", toDoItems);
-        model.addAttribute("stats", determineStats(toDoItems));
-        model.addAttribute("filter", "all");
+        model.addAttribute(ITEMS, toDoItems);
+        model.addAttribute(STATS, determineStats(toDoItems));
+        model.addAttribute(FILTER, "all");
         return INDEX_PAGE;
     }
 
-    @RequestMapping(value = "/active", method = RequestMethod.GET)
+    @GetMapping(value = "/active")
     public String activeItems(Model model) {
         List<ToDoItem> toDoItems = toDoRepository.findAll();
-        model.addAttribute("toDoItems", filterBasedOnStatus(toDoItems, true));
-        model.addAttribute("stats", determineStats(toDoItems));
-        model.addAttribute("filter", "active");
+        model.addAttribute(ITEMS, filterBasedOnStatus(toDoItems, true));
+        model.addAttribute(STATS, determineStats(toDoItems));
+        model.addAttribute(FILTER, "active");
         return INDEX_PAGE;
     }
 
-    @RequestMapping(value = "/completed", method = RequestMethod.GET)
+    @GetMapping(value = "/completed")
     public String completedItems(Model model) {
         List<ToDoItem> toDoItems = toDoRepository.findAll();
-        model.addAttribute("toDoItems", filterBasedOnStatus(toDoItems, false));
-        model.addAttribute("stats", determineStats(toDoItems));
-        model.addAttribute("filter", "active");
+        model.addAttribute(ITEMS, filterBasedOnStatus(toDoItems, false));
+        model.addAttribute(STATS, determineStats(toDoItems));
+        model.addAttribute(FILTER, "active");
         return INDEX_PAGE;
     }
 
-    @RequestMapping(value = "/insert", method = RequestMethod.POST)
+    @PostMapping(value = "/insert")
     public String insertItem(@RequestParam String name, @RequestParam String filter) {
         ToDoItem toDoItem = new ToDoItem();
         toDoItem.setName(name);
         toDoRepository.save(toDoItem);
-        return "redirect:" + filter;
+        return  REDIRECT+ ":" + filter;
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @PostMapping(value = "/update")
     public String updateItem(@RequestParam Long id, @RequestParam String name, @RequestParam String filter) {
         ToDoItem toDoItem = toDoRepository.findOne(id);
 
@@ -72,10 +78,10 @@ public class ToDoController {
             toDoRepository.save(toDoItem);
         }
 
-        return "redirect:" + filter;
+        return REDIRECT+ ":" + filter;
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @PostMapping(value = "/delete")
     public String deleteItem(@RequestParam Long id, @RequestParam String filter) {
         ToDoItem toDoItem = toDoRepository.findOne(id);
 
@@ -83,10 +89,10 @@ public class ToDoController {
             toDoRepository.delete(toDoItem);
         }
 
-        return "redirect:" + filter;
+        return REDIRECT+ ":" + filter;
     }
 
-    @RequestMapping(value = "/toggleStatus", method = RequestMethod.POST)
+    @PostMapping(value = "/toggleStatus")
     public String toggleStatus(@RequestParam Long id, @RequestParam(required = false) Boolean toggle, @RequestParam String filter) {
         ToDoItem toDoItem = toDoRepository.findOne(id);
 
@@ -96,10 +102,10 @@ public class ToDoController {
             toDoRepository.save(toDoItem);
         }
 
-        return "redirect:" + filter;
+        return REDIRECT+ ":" + filter;
     }
 
-    @RequestMapping(value = "/clearCompleted", method = RequestMethod.POST)
+    @PostMapping(value = "/clearCompleted")
     public String clearCompleted(@RequestParam String filter) {
         List<ToDoItem> toDoItems = toDoRepository.findAll();
 
@@ -109,7 +115,7 @@ public class ToDoController {
             }
         }
 
-        return "redirect:" + filter;
+        return REDIRECT+ ":" + filter;
     }
 
     private List<ToDoItem> filterBasedOnStatus(List<ToDoItem> toDoItems, boolean active) {
