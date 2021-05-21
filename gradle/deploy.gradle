@@ -12,7 +12,7 @@ buildscript {
 apply plugin: com.heroku.sdk.gradle.HerokuPlugin
 
 heroku {
-    appName = 'todo-spring-boot'
+    appName = 'devops-todo-spring-boot'
     includes = ["$buildDir.name/libs/$war.archiveName"]
     includeBuildDir = false
 
